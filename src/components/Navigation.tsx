@@ -82,6 +82,14 @@ export default function Navigation() {
                         {user.role === 'admin' ? 'Administrador' : user.role === 'mentor' ? 'Entidad Mentora' : 'Miembro'}
                       </span>
                     </div>
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="w-full flex items-center gap-2 px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors"
+                    >
+                      <User className="w-4 h-4 text-neutral-400" />
+                      Mi área
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
@@ -139,6 +147,14 @@ export default function Navigation() {
                       <p className="text-xs text-neutral-500">{user.organization}</p>
                     </div>
                   </div>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMenuOpen(false)}
+                    className="w-full flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200 transition-colors mb-2"
+                  >
+                    <User className="w-4 h-4" />
+                    Mi área
+                  </Link>
                   <button
                     onClick={() => { handleLogout(); setMenuOpen(false); }}
                     className="w-full flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 transition-colors"

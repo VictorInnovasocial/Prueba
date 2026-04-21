@@ -22,7 +22,7 @@ export default function LoginPage() {
     await new Promise((r) => setTimeout(r, 600));
     const ok = login(email, password);
     if (ok) {
-      router.push('/');
+      router.push('/dashboard');
     } else {
       setError('Email o contraseña incorrectos. Prueba con: ana@raicessolidarias.org / 1234');
     }

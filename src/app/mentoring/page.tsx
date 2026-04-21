@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Star,
   Users,
@@ -15,8 +15,137 @@ import {
   MessageCircle,
   Globe,
   Briefcase,
+  Link as LinkIcon,
+  ExternalLink,
+  Pencil,
+  Check,
 } from 'lucide-react';
 import { entities } from '@/data/entities';
+
+const BOOKING_URL_KEY = 'redcoopera_booking_url';
+
+function BookingSection() {
+  const [savedUrl, setSavedUrl] = useState('');
+  const [editUrl, setEditUrl] = useState('');
+  const [editing, setEditing] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem(BOOKING_URL_KEY) ?? '';
+    setSavedUrl(stored);
+    setEditUrl(stored);
+  }, []);
+
+  const handleSave = () => {
+    const trimmed = editUrl.trim();
+    setSavedUrl(trimmed);
+    localStorage.setItem(BOOKING_URL_KEY, trimmed);
+    setEditing(false);
+  };
+
+  const handleCancel = () => {
+    setEditUrl(savedUrl);
+    setEditing(false);
+  };
+
+  return (
+    <section className="bg-white py-14 border-t border-neutral-100">
+      <div className="container-main">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center">
+              <Calendar className="w-5 h-5 text-primary-700" />
+            </div>
+            <h2 className="text-2xl font-bold text-neutral-800">Programa tu mentoría</h2>
+          </div>
+          <p className="text-neutral-500 text-sm mb-6 ml-[52px]">
+            Accede al calendario de disponibilidad para reservar una sesión directamente con tu mentor.
+          </p>
+
+          <div className="bg-neutral-50 border border-neutral-200 rounded-2xl p-6">
+            {editing ? (
+              <div className="space-y-3">
+                <label className="block text-sm font-medium text-neutral-700">
+                  Pega el enlace de reserva (Calendly, Cal.com, etc.)
+                </label>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <LinkIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                    <input
+                      type="url"
+                      value={editUrl}
+                      onChange={(e) => setEditUrl(e.target.value)}
+                      placeholder="https://calendly.com/tu-organizacion/mentoria"
+                      className="input-base pl-10 text-sm"
+                      autoFocus
+                    />
+                  </div>
+                  <button
+                    onClick={handleSave}
+                    className="inline-flex items-center gap-1.5 px-4 py-3 bg-primary-700 text-white text-sm font-semibold rounded-lg hover:bg-primary-800 transition-colors"
+                  >
+                    <Check className="w-4 h-4" />
+                    Guardar
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    className="inline-flex items-center px-3 py-3 border border-neutral-200 text-neutral-500 text-sm rounded-lg hover:bg-neutral-100 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ) : savedUrl ? (
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-9 h-9 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Calendar className="w-4 h-4 text-emerald-700" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-neutral-800">Calendario de reservas activo</p>
+                    <p className="text-xs text-neutral-400 truncate max-w-xs">{savedUrl}</p>
+                  </div>
+                </div>
+                <div className="flex gap-2 flex-shrink-0">
+                  <a
+                    href={savedUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-primary-700 text-white text-sm font-semibold rounded-lg hover:bg-primary-800 transition-colors"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    Reservar sesión
+                  </a>
+                  <button
+                    onClick={() => { setEditUrl(savedUrl); setEditing(true); }}
+                    className="inline-flex items-center gap-1.5 px-3 py-2.5 border border-neutral-200 text-neutral-600 text-sm rounded-lg hover:bg-neutral-100 transition-colors"
+                    title="Cambiar enlace"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <Calendar className="w-10 h-10 text-neutral-300 mx-auto mb-3" />
+                <p className="text-sm font-medium text-neutral-600 mb-1">Sin enlace de reserva configurado</p>
+                <p className="text-xs text-neutral-400 mb-4">
+                  Añade el enlace de tu herramienta de reserva para que las entidades puedan programar sesiones.
+                </p>
+                <button
+                  onClick={() => setEditing(true)}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-primary-700 text-white text-sm font-semibold rounded-lg hover:bg-primary-800 transition-colors"
+                >
+                  <LinkIcon className="w-4 h-4" />
+                  Añadir enlace de reserva
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 const mentors = entities.filter((e) => e.mentorAvailable);
 
@@ -409,6 +538,9 @@ export default function MentoringPage() {
           </div>
         </div>
       </section>
+
+      {/* Booking link */}
+      <BookingSection />
 
       {/* Benefits Section */}
       <section className="bg-white py-16 border-t border-neutral-100">

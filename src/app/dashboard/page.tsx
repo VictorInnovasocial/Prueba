@@ -17,6 +17,7 @@ import {
   LogOut,
   Briefcase,
   Award,
+  MessageCircle,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -29,6 +30,7 @@ const quickLinks = [
   { href: '/repositorio', icon: BookOpen, label: 'Repositorio', desc: 'Herramientas y manuales', color: 'bg-primary-50 text-primary-700 border-primary-100' },
   { href: '/formacion', icon: GraduationCap, label: 'Formación', desc: 'Cursos y talleres', color: 'bg-accent-50 text-accent-600 border-accent-100' },
   { href: '/comunidad', icon: Users, label: 'Comunidad', desc: 'Red de entidades', color: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
+  { href: '/foro', icon: MessageCircle, label: 'Foro', desc: 'Debates de la Red', color: 'bg-cyan-50 text-cyan-700 border-cyan-100' },
   { href: '/propuestas', icon: Handshake, label: 'Propuestas', desc: 'Proyectos conjuntos', color: 'bg-purple-50 text-purple-700 border-purple-100' },
   { href: '/mentoring', icon: Star, label: 'Mentoring', desc: 'Sesiones de mentoría', color: 'bg-rose-50 text-rose-700 border-rose-100' },
 ];

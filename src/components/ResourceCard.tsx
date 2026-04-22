@@ -1,3 +1,4 @@
+import NextLink from 'next/link';
 import { Download, ExternalLink, FileText, FileSpreadsheet, Presentation, Video, Link, BookOpen } from 'lucide-react';
 import { Resource, categoryColors } from '@/data/resources';
 
@@ -24,8 +25,7 @@ const typeColors: Record<string, string> = {
 };
 
 function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+  return new Date(dateStr).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 function formatDownloads(count: number): string {
@@ -36,54 +36,39 @@ function formatDownloads(count: number): string {
 export default function ResourceCard({ resource }: ResourceCardProps) {
   return (
     <article className="card group flex flex-col h-full">
-      {/* Header */}
       <div className="p-5 pb-3 flex-1">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex flex-wrap gap-2">
-            <span className={categoryColors[resource.category]}>
-              {resource.category}
-            </span>
+            <span className={categoryColors[resource.category]}>{resource.category}</span>
             <span className={`badge border ${typeColors[resource.type]}`}>
-              <span className="flex items-center gap-1">
-                {typeIcons[resource.type]}
-                {resource.type}
-              </span>
+              <span className="flex items-center gap-1">{typeIcons[resource.type]}{resource.type}</span>
             </span>
           </div>
           {resource.featured && (
-            <span className="badge bg-accent-50 text-accent-600 border border-accent-200 flex-shrink-0">
-              Destacado
-            </span>
+            <span className="badge bg-accent-50 text-accent-600 border border-accent-200 flex-shrink-0">Destacado</span>
           )}
         </div>
 
-        <h3 className="text-base font-semibold text-neutral-800 group-hover:text-primary-700 transition-colors leading-snug mb-2">
-          {resource.title}
-        </h3>
+        <NextLink href={`/repositorio/${resource.id}`}>
+          <h3 className="text-base font-semibold text-neutral-800 group-hover:text-primary-700 transition-colors leading-snug mb-2 hover:underline decoration-primary-300">
+            {resource.title}
+          </h3>
+        </NextLink>
 
-        <p className="text-sm text-neutral-500 leading-relaxed line-clamp-3 mb-4">
-          {resource.description}
-        </p>
+        <p className="text-sm text-neutral-500 leading-relaxed line-clamp-3 mb-4">{resource.description}</p>
 
-        {/* Tags */}
         <div className="flex flex-wrap gap-1.5 mb-4">
           {resource.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="text-xs px-2 py-0.5 bg-neutral-100 text-neutral-500 rounded-full hover:bg-primary-50 hover:text-primary-600 transition-colors cursor-default"
-            >
+            <span key={tag} className="text-xs px-2 py-0.5 bg-neutral-100 text-neutral-500 rounded-full hover:bg-primary-50 hover:text-primary-600 transition-colors cursor-default">
               #{tag}
             </span>
           ))}
           {resource.tags.length > 3 && (
-            <span className="text-xs px-2 py-0.5 bg-neutral-100 text-neutral-400 rounded-full">
-              +{resource.tags.length - 3}
-            </span>
+            <span className="text-xs px-2 py-0.5 bg-neutral-100 text-neutral-400 rounded-full">+{resource.tags.length - 3}</span>
           )}
         </div>
       </div>
 
-      {/* Footer */}
       <div className="px-5 pb-5 pt-3 border-t border-neutral-100">
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0 flex-1">
@@ -94,28 +79,23 @@ export default function ResourceCard({ resource }: ResourceCardProps) {
               <p className="text-xs text-neutral-400 whitespace-nowrap">{formatDate(resource.date)}</p>
             </div>
           </div>
-
           <div className="flex items-center gap-2 flex-shrink-0">
             <span className="text-xs text-neutral-400 flex items-center gap-1">
-              <Download className="w-3 h-3" />
-              {formatDownloads(resource.downloads)}
+              <Download className="w-3 h-3" />{formatDownloads(resource.downloads)}
             </span>
+            <NextLink
+              href={`/repositorio/${resource.id}`}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-neutral-200 text-neutral-600 text-xs font-medium rounded-lg hover:border-primary-300 hover:text-primary-700 hover:bg-primary-50 transition-all"
+            >
+              Ver más
+            </NextLink>
             <a
               href={resource.downloadUrl}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-700 text-white text-xs font-semibold rounded-lg hover:bg-primary-800 transition-colors"
-              title={`Descargar ${resource.title}`}
             >
-              {resource.type === 'VIDEO' || resource.type === 'ENLACE' ? (
-                <>
-                  <ExternalLink className="w-3 h-3" />
-                  Ver
-                </>
-              ) : (
-                <>
-                  <Download className="w-3 h-3" />
-                  Descargar
-                </>
-              )}
+              {resource.type === 'VIDEO' || resource.type === 'ENLACE'
+                ? <><ExternalLink className="w-3 h-3" />Ver</>
+                : <><Download className="w-3 h-3" />Descargar</>}
             </a>
           </div>
         </div>

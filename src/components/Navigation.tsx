@@ -11,6 +11,7 @@ const navLinks = [
   { href: '/repositorio', label: 'Repositorio' },
   { href: '/formacion', label: 'Formación' },
   { href: '/comunidad', label: 'Comunidad' },
+  { href: '/foro', label: 'Foro' },
   { href: '/propuestas', label: 'Propuestas' },
   { href: '/mentoring', label: 'Mentoring' },
 ];
